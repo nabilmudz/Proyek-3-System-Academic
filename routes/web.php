@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CourseController;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\RouteGroup;
@@ -49,11 +50,15 @@ Route::prefix('mahasiswa')
     Route::get('/', function () {
         $me = auth()->user();
         $mahasiswa = Student::where('user_id', $me->id)->firstOrFail();
-        return view('mahasiswa.dashboard', compact('me', 'mahasiswa'));
+        $enrollments = Enrollment::where('student_id', $mahasiswa->id)->get();
+        return view('mahasiswa.dashboard', compact('me', 'mahasiswa', 'enrollments'));
     })->name('mahasiswa.dashboard');
     Route::get('/courses', function () {
+        $me = auth()->user();
+        $mahasiswa = Student::where('user_id', $me->id)->firstOrFail();
+        $enrollments = Enrollment::where('student_id', $mahasiswa->id)->get();
         $courses = Course::all();
-        return view('mahasiswa.course', compact( 'courses'));
+        return view('mahasiswa.course', compact( 'courses', 'enrollments'));
     })->name('mahasiswa.course');
 });
 
