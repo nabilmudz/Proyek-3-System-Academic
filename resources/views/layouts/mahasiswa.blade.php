@@ -6,8 +6,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     @vite('resources/css/app.css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body class="flex">
+<body class="flex flex-row">
     <aside class="w-56 h-screen bg-gray-800 text-white px-4 py-6">
         <div class="flex h-full flex-col">
             <div class="flex items-center justify-center gap-2 mb-6">
@@ -42,7 +43,7 @@
                         class="flex items-center gap-2 w-48   px-3 py-2 rounded 
                             hover:text-[#FB9503]
                             focus:bg-gray-500 
-                            {{ request()->routeIs('mahasiswa.course') ? 'bg-gray-700 text-orange-400' : '' }}">
+                            {{ request()->routeIs('mahasiswa.logout') ? 'bg-gray-700 text-orange-400' : '' }}">
                         <i class="fa-solid fa-right-from-bracket text-sm text-[#d22424]"></i>
                         <span class="text-[#d22424]">Sign Out</span>
                     </a>
@@ -54,5 +55,7 @@
     <main class="flex-1 p-10 bg-gray-100">
         @yield('content')
     </main>
+    <x-toast />
+    @stack('scripts')
 </body>
 </html>

@@ -15,6 +15,22 @@ class StudentController extends Controller
         $mahasiswas = Student::with('user')->get();
         return view('admin.mahasiswa', compact('mahasiswas'));
     }
+    
+    public function getMe(Request $request)
+    {
+        $user = auth()->user();
+
+        $mhs = Student::with('user')
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil mendapatkan mahasiswa',
+            'data' => $mhs
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([

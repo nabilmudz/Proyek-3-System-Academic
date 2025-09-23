@@ -8,12 +8,12 @@
         <div class="flex justify-between mb-4">
             <button onclick="document.getElementById('courseModal').classList.remove('hidden')" 
                     class="bg-orange-400 hover:bg-orange-600 text-md font-light text-white px-5 py-1 rounded-md items-center w-30 mb-2 hover:cursor-pointer">
-                <a class="text-md font-light text-white px-5 py-2 rounded-md items-center w-30 hover:cursor-pointer">Tambah Course</a>    
+                <a class="text-md font-light text-white px-5 py-2 rounded-md items-center w-30 hover:cursor-pointer">Tambah</a>    
             </button>
-            <form action="" method="get">
+            <!-- <form action="" method="get">
                 <input type="text" class="w-60 h-9 mb-2 rounded-md">
                 <a class="text-md font-light bg-orange-400 hover:bg-orange-600 text-white px-5 py-2 rounded-md items-center w-30 mb-4 hover:cursor-pointer">Cari</a>    
-            </form>
+            </form> -->
         </div>
         <table class="table-auto w-full border text-sm">
             <thead>
@@ -34,8 +34,8 @@
                         <td class="px-4 py-2 border">{{ $course->credits }}</td>
                         <td class="px-4 py-2 border">{{ $course->semester }}</td>
                         <td class="px-4 py-2 border">{{ $course->major }}</td>
-                        <td>
-                            <div class="flex gap-3 p-3 bg-white rounded-lg w-max">
+                        <td class="border flex justify-center">
+                            <div class="flex gap-3 py-2">
                                 <button type="button" 
                                     onclick="showDetailModal('{{ $course->code }}')"
                                     class="flex items-center justify-center w-5 h-5 rounded-md hover:bg-green-100">

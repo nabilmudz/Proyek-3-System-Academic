@@ -26,47 +26,65 @@ class AuthController extends Controller
     }
     public function register(Request $request)
     {
-        $data = $request->validate([
-            'username' => 'required|string|max:100',
-            'email' => 'required|string|max:100',
-            'password' => 'required|string|min:6|confirmed'
-        ]);
+        try {
+            $data = $request->validate([
+                'username' => 'required|string|max:100',
+                'email' => 'required|string|max:100',
+                'password' => 'required|string|min:6|confirmed'
+            ]);
 
-        User::create([
-            'id' => Str::uuid(),
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+            User::create([
+                'id' => Str::uuid(),
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+            ]);
 
-        return redirect('/auth/login')->with('success', 'Akun didaftarkan! Mohon lakukan login.');
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Berhasil register! Mohon lakukan login untuk masuk.',
+                'data'=> null
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'data'    => null
+            ], 500);
+        }
     }
     
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        try {
+            $credentials = $request->only('email', 'password');
 
-        if (! $token = JWTAuth::attempt($credentials)) {
-            if ($request->expectsJson()) {
-                return response()->json(['error' => 'Invalid credentials'], 401);
+            if (! $token = JWTAuth::attempt($credentials)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid credentials',
+                    'data'    => null
+                ], 401);
             }
-            return back()->withErrors(['email' => 'Invalid credentials'])->onlyInput('email');
-        }
 
-        $user = auth()->user();
-        Auth::login($user);
-
-        if ($request->expectsJson()) {
+            $user = auth()->user();
+            Auth::login($user);
             return response()->json([
-                'token' => $token,
-                'role'  => $user->role,
-                'user'  => $user
+                'success' => true,
+                'message' => 'Login successful',
+                'data'    => [
+                    'token' => $token,
+                    'user'  => $user,
+                    'role'  => $user->role,
+                ]
             ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'data'    => null
+            ], 500);
         }
-
-        return $user->role === 'admin'
-            ? redirect()->route('admin.dashboard')
-            : redirect()->route('mahasiswa.dashboard');
     }
 
     public function logout(Request $request){

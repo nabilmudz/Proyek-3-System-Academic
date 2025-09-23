@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('credits');
-            $table->string('semester');
+            $table->integer('semester');
             $table->string('major');
             $table->timestamps();
         });

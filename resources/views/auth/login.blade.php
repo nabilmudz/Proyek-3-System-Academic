@@ -4,7 +4,7 @@
     <meta charset="UTF-8">      
     <title>Login</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite(['resources/css/app.css', 'resources/js/login.js'])
+    @vite(['resources/css/app.css', 'resources/js/auth/login.js'])
 </head>
 <body class="flex items-center justify-center h-screen bg-gray-100">
     <div class="flex flex-col items-center bg-white shadow border-r-2 p-10 rounded-md" >
@@ -27,5 +27,6 @@
             <a href="{{ route('register') }}" class="text-xs text-blue-700 underline">Register</a>
         </p>
     </div>
+    <x-toast />
 </body>
 </html>

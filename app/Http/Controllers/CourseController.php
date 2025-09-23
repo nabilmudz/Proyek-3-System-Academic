@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+    public function showAll()
+    {
+        $courses = Course::all();
+        return response([
+            'success'=>true,
+            'message'=>'Berhasil mendapatkan course',
+            'data'=>$courses,
+        ]);
+    }
     public function index()
     {
         $courses = Course::all();
@@ -21,7 +30,7 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'credits' => 'required|integer|min:1|max:6',
-            'semester' => 'required|string|max:50',
+            'semester' => 'required|integer|min:1|max:8',
             'major' => 'required|string|max:100',
         ]);
 

@@ -15,6 +15,3 @@ use App\Http\Controllers\EnrollmentController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/enroll/create', [EnrollmentController::class, 'create']);

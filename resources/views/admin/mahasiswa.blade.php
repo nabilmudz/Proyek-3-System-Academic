@@ -10,10 +10,10 @@
                     class="bg-orange-400 hover:bg-orange-600 text-md font-light text-white px-5 py-1 rounded-md items-center w-30 mb-2 hover:cursor-pointer">
                 <a class="text-md font-light text-white px-5 py-2 rounded-md items-center w-30 hover:cursor-pointer">Tambah</a>    
             </button>
-            <form action="" method="get">
+            <!-- <form action="" method="get">
                 <input type="text" class="w-60 h-9 mb-2 rounded-md">
                 <a class="text-md font-light bg-orange-400 hover:bg-orange-600 text-white px-5 py-2 rounded-md items-center w-30 mb-4 hover:cursor-pointer">Cari</a>    
-            </form>
+            </form> -->
         </div>
         <table class="table-auto w-full border text-sm">
             <thead>
@@ -38,8 +38,8 @@
                         <td class="px-4 py-2 border">{{ $mahasiswa->study_program }}</td>
                         <td class="px-4 py-2 border">{{ $mahasiswa->gender }}</td>
                         <td class="px-4 py-2 border">{{ $mahasiswa->birth_date }}</td>
-                        <td>
-                            <div class="flex gap-3 p-3 bg-white rounded-lg w-max">
+                        <td class="border flex justify-center">
+                            <div class="flex gap-3 p-2">
                                 <button type="button" 
                                     onclick="showDetailModal('{{ $mahasiswa->nim }}')"
                                     class="flex items-center justify-center w-5 h-5 rounded-md hover:bg-green-100">

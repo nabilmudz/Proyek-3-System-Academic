@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CourseController;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +26,7 @@ Route::get('/', function () {
     if ($user->role === 'mahasiswa') {
         return redirect()->route('mahasiswa.dashboard');
     } elseif ($user->role === 'admin') {
-        return redirect()->route('admin');
+        return redirect()->route('admin.dashboard');
     }
 })->middleware('auth');
 
@@ -35,12 +35,13 @@ Route::prefix('auth')->group(function () {
     Route::get('/login', function () {
         return view('auth.login');
     })->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
     
     Route::get('/register', function () {
         return view('auth.register');
     })->name('register');;
-    Route::post('/register', [AuthController::class,'register'])->name('register.store');
+
+    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('/register', [AuthController::class,'register'])->name('auth.register');
     Route::get('/logout', [AuthController::class,'logout'])->name('logout');
 });
 
@@ -48,19 +49,32 @@ Route::prefix('mahasiswa')
     ->middleware(['auth', 'role:mahasiswa'])
     ->group(function () {
     Route::get('/', function () {
-        $me = auth()->user();
-        $mahasiswa = Student::where('user_id', $me->id)->firstOrFail();
-        $enrollments = Enrollment::where('student_id', $mahasiswa->id)->get();
-        return view('mahasiswa.dashboard', compact('me', 'mahasiswa', 'enrollments'));
+        return view('mahasiswa.dashboard');
     })->name('mahasiswa.dashboard');
     Route::get('/courses', function () {
-        $me = auth()->user();
-        $mahasiswa = Student::where('user_id', $me->id)->firstOrFail();
-        $enrollments = Enrollment::where('student_id', $mahasiswa->id)->get();
-        $courses = Course::all();
-        return view('mahasiswa.course', compact( 'courses', 'enrollments'));
+        return view('mahasiswa.course');
     })->name('mahasiswa.course');
 });
+
+Route::prefix('enrollment')->group(function () {
+    Route::get('/get-course', [EnrollmentController::class,'getMyEnrollment'])->name('enroll.get.course')->middleware(['auth', 'role:mahasiswa']);
+    Route::post('/create', [EnrollmentController::class,'create'])->name('enroll.course');
+});
+
+Route::prefix('courses')
+    ->group(function () {
+        Route::get(
+            '/show-all', [CourseController::class, 'showAll'])
+            ->name('course.showAll')
+            ->middleware(['auth', 'role:mahasiswa']);
+        // Route::post('/create', [EnrollmentController::class, 'create'
+    });
+
+Route::prefix('student')
+    ->group(function () {
+        Route::get('/me', [StudentController::class, 'getMe'])->name('student.me')->middleware(['auth', 'role:mahasiswa']);
+    });
+
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::prefix("admin")->group(function () {
